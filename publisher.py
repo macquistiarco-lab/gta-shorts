@@ -30,7 +30,7 @@ TOKEN_URL = "https://oauth2.googleapis.com/token"
 API = "https://www.googleapis.com/youtube/v3"
 UPLOAD_URL = "https://www.googleapis.com/upload/youtube/v3/videos"
 CATEGORY_GAMING = "20"
-SLOTS = ["19:00", "23:00"]          # Rome time = 1pm and 5pm US Eastern
+SLOTS = ["14:00", "18:00"]          # Rome time = 8am and noon US Eastern
 SLOT_TZ = "Europe/Rome"
 MIN_LEAD = dt.timedelta(minutes=20)
 BASE_TAGS = ["shorts", "gta6", "gta", "gaming"]
@@ -246,7 +246,10 @@ def main():
             sys.exit(f"{video} missing: run python clip.py {n}")
         at = None
         if a.slot:
-            at = next_slot(taken_times(token, ch["uploads"])).strftime("%Y-%m-%dT%H:%M:%SZ")
+            # the uploads playlist lags behind fresh uploads, so also count our own records
+            taken = taken_times(token, ch["uploads"]) + [
+                _utc(p["publish_at"]) for p in published.values() if p.get("publish_at")]
+            at = next_slot(taken).strftime("%Y-%m-%dT%H:%M:%SZ")
         log(f"uploading {n} ({os.path.getsize(video) / 1e6:.1f} MB, {at or a.privacy})")
         vid = upload(video, meta, a.privacy, at, token)
         published[n] = {"id": vid, "url": f"https://youtube.com/shorts/{vid}",
