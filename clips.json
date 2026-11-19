@@ -285,5 +285,32 @@
    "gta",
    "gaming"
   ]
+ },
+ "lacy04_phone": {
+  "stream": "lacy_gta6_chapter2",
+  "start": 3455,
+  "end": 3530,
+  "cam": [
+   0,
+   0,
+   334,
+   188
+  ],
+  "game": [
+   300,
+   140,
+   980,
+   580
+  ],
+  "hook": "LACY CHECKS\\NLUCIA'S PHONE",
+  "title": "LACY Went Through Lucia's Phone in GTA 6",
+  "description": "LACY opens Lucia's gallery in GTA 6 and instantly regrets it.",
+  "hashtags": [
+   "LACY",
+   "gta6",
+   "lacy",
+   "gta",
+   "gaming"
+  ]
  }
 }
