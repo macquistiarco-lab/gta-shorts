@@ -189,5 +189,20 @@
    "gta",
    "gaming"
   ]
+ },
+ "yr05_treasure": {
+  "stream": "yourrage_gta6_day1",
+  "start": 30955,
+  "end": 31040,
+  "hook": "RAGE FINDS TREASURE\\NIN GTA 6",
+  "title": "YourRAGE Finds Sunken Treasure in GTA 6",
+  "description": "Rage goes diving in GTA 6, finds gold doubloons and then his buddy gets stuck at the bottom of the ocean.",
+  "hashtags": [
+   "yourrage",
+   "gta6",
+   "rage",
+   "gta",
+   "gaming"
+  ]
  }
 }
