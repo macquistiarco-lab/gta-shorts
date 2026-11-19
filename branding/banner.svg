@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2560 1440" width="2560" height="1440">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#12052e"/>
+    <stop offset="0.30" stop-color="#3a0a5c"/>
+    <stop offset="0.48" stop-color="#9c1a6e"/>
+    <stop offset="0.58" stop-color="#e8336c"/>
+    <stop offset="0.66" stop-color="#ff8a3d"/>
+  </linearGradient>
+  <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffe66d"/>
+    <stop offset="1" stop-color="#ff3d7f"/>
+  </linearGradient>
+  <linearGradient id="txt" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffffff"/>
+    <stop offset="1" stop-color="#ffd1ea"/>
+  </linearGradient>
+  <clipPath id="sunclip"><circle cx="1280" cy="760" r="300"/></clipPath>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="12" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="tglow" x="-20%" y="-50%" width="140%" height="200%">
+    <feGaussianBlur stdDeviation="10" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="60"/></filter>
+</defs>
+<rect width="2560" height="1440" fill="url(#sky)"/>
+<!-- stars -->
+<g fill="#fff" opacity="0.7">
+  <circle cx="300" cy="140" r="3"/><circle cx="620" cy="260" r="2"/><circle cx="900" cy="110" r="3"/>
+  <circle cx="1500" cy="180" r="2"/><circle cx="1800" cy="90" r="3"/><circle cx="2150" cy="230" r="2"/>
+  <circle cx="2400" cy="120" r="3"/><circle cx="1150" cy="300" r="2"/><circle cx="160" cy="380" r="2"/>
+</g>
+<!-- sun -->
+<circle cx="1280" cy="760" r="340" fill="#ff3d7f" opacity="0.4" filter="url(#soft)"/>
+<g clip-path="url(#sunclip)">
+  <rect x="960" y="440" width="640" height="640" fill="url(#sun)"/>
+  <g fill="#9c1a6e">
+    <rect x="960" y="790" width="640" height="10"/>
+    <rect x="960" y="826" width="640" height="16"/>
+    <rect x="960" y="868" width="640" height="22"/>
+    <rect x="960" y="916" width="640" height="30"/>
+  </g>
+</g>
+<!-- floor grid -->
+<rect x="0" y="950" width="2560" height="490" fill="#1a0630"/>
+<g stroke="#ff4fa3" stroke-width="3" opacity="0.55" fill="none">
+  <line x1="0" y1="975" x2="2560" y2="975"/>
+  <line x1="0" y1="1015" x2="2560" y2="1015"/>
+  <line x1="0" y1="1075" x2="2560" y2="1075"/>
+  <line x1="0" y1="1165" x2="2560" y2="1165"/>
+  <line x1="0" y1="1300" x2="2560" y2="1300"/>
+  <path d="M1280 950 L1280 1440 M1280 950 L960 1440 M1280 950 L1600 1440 M1280 950 L560 1440 M1280 950 L2000 1440 M1280 950 L80 1440 M1280 950 L2480 1440 M1280 950 L-600 1440 M1280 950 L3160 1440"/>
+</g>
+<line x1="0" y1="950" x2="2560" y2="950" stroke="#ff8ad0" stroke-width="4"/>
+<!-- palms (edges, outside safe area) -->
+<g fill="#0c0220">
+  <path d="M330 960 C350 780 370 600 430 430 L444 434 C392 600 376 780 360 960 Z"/>
+  <g transform="translate(438 432)">
+    <path d="M0 0 C-60 -40 -150 -30 -220 20 C-140 -10 -75 -5 0 0Z"/>
+    <path d="M0 0 C-40 -70 -120 -115 -195 -105 C-120 -85 -55 -50 0 0Z"/>
+    <path d="M0 0 C10 -85 65 -140 130 -150 C75 -105 32 -62 0 0Z"/>
+    <path d="M0 0 C65 -42 150 -42 215 0 C140 -20 75 -15 0 0Z"/>
+    <path d="M0 0 C55 10 120 55 150 120 C98 65 55 32 0 0Z"/>
+    <path d="M0 0 C-55 10 -120 55 -140 120 C-98 65 -55 32 0 0Z"/>
+  </g>
+  <path d="M150 960 C160 840 175 730 210 640 L222 644 C190 730 178 840 176 960 Z"/>
+  <g transform="translate(215 642) scale(0.7)">
+    <path d="M0 0 C-60 -40 -150 -30 -220 20 C-140 -10 -75 -5 0 0Z"/>
+    <path d="M0 0 C10 -85 65 -140 130 -150 C75 -105 32 -62 0 0Z"/>
+    <path d="M0 0 C65 -42 150 -42 215 0 C140 -20 75 -15 0 0Z"/>
+    <path d="M0 0 C-55 10 -120 55 -140 120 C-98 65 -55 32 0 0Z"/>
+    <path d="M0 0 C55 10 120 55 150 120 C98 65 55 32 0 0Z"/>
+  </g>
+  <path d="M2230 960 C2210 790 2190 620 2130 470 L2116 474 C2170 620 2190 790 2204 960 Z"/>
+  <g transform="translate(2122 472)">
+    <path d="M0 0 C60 -40 150 -30 220 20 C140 -10 75 -5 0 0Z"/>
+    <path d="M0 0 C40 -70 120 -110 190 -100 C120 -80 55 -48 0 0Z"/>
+    <path d="M0 0 C-10 -85 -65 -135 -125 -145 C-75 -100 -32 -62 0 0Z"/>
+    <path d="M0 0 C-65 -42 -150 -42 -210 0 C-140 -20 -75 -15 0 0Z"/>
+    <path d="M0 0 C-55 10 -115 55 -140 115 C-95 62 -50 30 0 0Z"/>
+    <path d="M0 0 C50 10 115 50 140 112 C95 60 50 30 0 0Z"/>
+  </g>
+  <path d="M2420 960 C2410 850 2395 750 2365 670 L2353 674 C2380 750 2396 850 2396 960 Z"/>
+  <g transform="translate(2360 672) scale(0.7)">
+    <path d="M0 0 C60 -40 150 -30 220 20 C140 -10 75 -5 0 0Z"/>
+    <path d="M0 0 C-10 -85 -65 -135 -125 -145 C-75 -100 -32 -62 0 0Z"/>
+    <path d="M0 0 C-65 -42 -150 -42 -210 0 C-140 -20 -75 -15 0 0Z"/>
+    <path d="M0 0 C-55 10 -115 55 -140 115 C-95 62 -50 30 0 0Z"/>
+    <path d="M0 0 C50 10 115 50 140 112 C95 60 50 30 0 0Z"/>
+  </g>
+</g>
+<!-- safe area content: 1546x423 centered (x 507-2053, y 508-931) -->
+<g filter="url(#glow)">
+  <rect x="600" y="545" width="200" height="340" rx="32" fill="#12052e" fill-opacity="0.6" stroke="#29f0ff" stroke-width="13"/>
+  <path d="M665 640 L765 715 L665 790 Z" fill="#ff2e9a" stroke="#ffd1ea" stroke-width="7" stroke-linejoin="round"/>
+</g>
+<g font-family="Inter Display" font-weight="900" text-anchor="middle">
+  <text x="1450" y="690" font-size="120" font-style="italic" fill="url(#txt)" stroke="#2a0640" stroke-width="10" paint-order="stroke" filter="url(#tglow)" letter-spacing="2">LE CLIP PIÙ PAZZE</text>
+  <text x="1450" y="805" font-size="72" fill="#29f0ff" stroke="#12052e" stroke-width="8" paint-order="stroke" letter-spacing="10" filter="url(#tglow)">DALLE LIVE DI GTA 6</text>
+  <text x="1450" y="890" font-size="44" font-weight="800" fill="#ffe66d" stroke="#12052e" stroke-width="7" paint-order="stroke" letter-spacing="8">NUOVI SHORTS OGNI GIORNO</text>
+</g>
+</svg>
