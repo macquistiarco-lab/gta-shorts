@@ -4,7 +4,38 @@
     "title": "iShowSpeed's First Time Playing GTA 6!",
     "source_url": "https://www.youtube.com/watch?v=kR8bhkVAgBY",
     "drive_id": "1jSAyelDfGUS21oTVLHqL52xRWyxbVpP7",
-    "cam": [2, 310, 256, 156],
-    "game": [270, 40, 1000, 640]
+    "cam": [
+      2,
+      310,
+      256,
+      156
+    ],
+    "game": [
+      270,
+      40,
+      1000,
+      640
+    ]
+  },
+  "yourrage_gta6_day1": {
+    "streamer": "YourRAGE",
+    "title": "PLAYING GTA 6 FOR THE FIRST TIME!!!!!",
+    "source_url": "https://www.twitch.tv/videos/2933174196",
+    "twitch_vod": "2933174196",
+    "quality": "720p60",
+    "campaign": "https://contentrewards.com/c/campaigns/be9b123e-ea47-4305-b6c5-af81f503b247",
+    "cam": [
+      1000,
+      430,
+      280,
+      290
+    ],
+    "cam_w": 700,
+    "game": [
+      0,
+      110,
+      980,
+      600
+    ]
   }
 }

@@ -1,6 +1,6 @@
 """Transcribe a stream with word timestamps -> data/<stream>.transcript.json
 
-  python transcribe.py ishowspeed_gta6_day1
+  python transcribe.py ishowspeed_gta6_day1 [model]   # model: small (default), base.en for long VODs
 
 Runs on CPU (faster-whisper "small", int8): about 15 minutes for 35 minutes of audio.
 The model downloads from huggingface the first time (HF_HUB_DISABLE_XET=1 is set because
@@ -13,14 +13,15 @@ from faster_whisper import WhisperModel
 from clip import HERE, source
 
 stream = sys.argv[1]
+model = sys.argv[2] if len(sys.argv) > 2 else "small"
 info = json.load(open(os.path.join(HERE, "data", "streams.json")))[stream]
 wav = os.path.join(HERE, "src", f"{stream}.wav")
 if not os.path.exists(wav):
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", source(stream, info), "-vn", "-ac", "1",
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", source(stream, info)[0], "-vn", "-ac", "1",
                     "-ar", "16000", wav], check=True)
 wf = wave.open(wav)
 audio = np.frombuffer(wf.readframes(wf.getnframes()), dtype=np.int16).astype(np.float32) / 32768.0
-m = WhisperModel("small", download_root=os.path.join(HERE, "models"), device="cpu",
+m = WhisperModel(model, download_root=os.path.join(HERE, "models"), device="cpu",
                  compute_type="int8", cpu_threads=os.cpu_count())
 segs, _ = m.transcribe(audio, language="en", word_timestamps=True, vad_filter=True, beam_size=1)
 out = []

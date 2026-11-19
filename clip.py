@@ -17,7 +17,18 @@ W, H = 1080, 1920
 CAM_Y = 230
 
 
-def source(stream, info):
+def source(stream, info, a=None, b=None):
+    """Local video for the stream and the time of its first frame in the stream.
+    Twitch VODs: only the window [a, b] is downloaded (hls.py). Drive: the whole file."""
+    if info.get("twitch_vod"):
+        from hls import cut
+        a0, b0 = max(0, int(a) - 2), int(b) + 2
+        path = os.path.join(HERE, "src", f"{stream}_{a0}_{b0}.mp4")
+        meta = path + ".start"
+        if not os.path.exists(meta):
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            open(meta, "w").write(str(cut(info["twitch_vod"], a0, b0, path, info.get("quality", "720p60"))))
+        return path, float(open(meta).read())
     path = os.path.join(HERE, "src", f"{stream}.mp4")
     if not os.path.exists(path):
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -26,7 +37,7 @@ def source(stream, info):
         print(f"downloading {stream} from Drive...", flush=True)
         subprocess.run(["curl", "-sSLf", "--max-time", "1800", "-o", path + ".part", url], check=True)
         os.rename(path + ".part", path)
-    return path
+    return path, 0.0
 
 
 def ts(t):
@@ -72,10 +83,11 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 
 def render(name, c):
     info = json.load(open(os.path.join(HERE, "data", "streams.json")))[c["stream"]]
-    src = source(c["stream"], info)
+    src, src_t0 = source(c["stream"], info, c["start"], c["end"])
     CAM, GAME = info["cam"], info["game"]
     global CAM_H, GAME_Y, GAME_H
-    CAM_W = GAME_W = W
+    CAM_W = info.get("cam_w", W)  # facecam width on screen (centered)
+    GAME_W = W
     CAM_H = round(CAM_W * CAM[3] / CAM[2] / 2) * 2
     GAME_H = round(GAME_W * GAME[3] / GAME[2] / 2) * 2
     GAME_Y = CAM_Y + CAM_H + 12
@@ -101,10 +113,10 @@ def render(name, c):
           f"[a]crop={gw}:{gh}:{gx}:{gy},scale=-2:{H},crop={W}:{H},boxblur=20:2,eq=brightness=-0.25[bg];"
           f"[b]crop={cw}:{ch}:{cx}:{cy},scale={CAM_W}:{CAM_H}:flags=lanczos,unsharp=5:5:0.8[cam];"
           f"[c]crop={gw}:{gh}:{gx}:{gy},scale={GAME_W}:{GAME_H}:flags=lanczos[game];"
-          f"[bg][cam]overlay=0:{CAM_Y}[t1];[t1][game]overlay=0:{GAME_Y},subtitles={sub}[v];"
+          f"[bg][cam]overlay={(W - CAM_W) // 2}:{CAM_Y}[t1];[t1][game]overlay=0:{GAME_Y},subtitles={sub}[v];"
           f"[0:a]loudnorm=I=-14:TP=-1.5:LRA=11[au]")
     out = os.path.join(HERE, "out", f"{name}.mp4")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(a), "-t", str(dur), "-i", src,
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a - src_t0:.3f}", "-t", str(dur), "-i", src,
                     "-filter_complex", fc, "-map", "[v]", "-map", "[au]",
                     "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-r", "30",
                     "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", out], check=True)
