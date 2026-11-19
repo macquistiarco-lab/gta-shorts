@@ -7,13 +7,14 @@
 ```
 🌴 The craziest GTA 6 stream moments
 🔥 New clips every day
-▶️ More on YouTube 👇
+▶️ YouTube: @GTAVICLIPS-s8w
 ```
 
-**Website field** (Edit profile → Website):
+**YouTube link**: Edit profile → Social → YouTube, sign in and pick the GTA channel
+(clickable icon on the profile). From 1000 followers the Website field also appears:
 
 ```
-https://www.youtube.com/channel/UCIHcmldmf_ILilCNMGTqwIA
+https://www.youtube.com/@GTAVICLIPS-s8w
 ```
 
 ## YouTube
