@@ -46,11 +46,14 @@ def cut(vod, start, end, out, quality="720p60"):
         sys.exit(f"no segments for {start}-{end}")
     with tempfile.TemporaryDirectory() as d:
         raw = os.path.join(d, "raw.mp4" if init else "raw.ts")
+        urls = [u for _, u in segs]
         with open(raw, "wb") as f, ThreadPoolExecutor(8) as ex:
             if init:
                 f.write(_get(init))
-            for data in ex.map(_get, [u for _, u in segs]):  # map keeps the order
-                f.write(data)
+            # batches keep memory flat on 29-hour VODs (map over everything buffers it all)
+            for i in range(0, len(urls), 32):
+                for data in ex.map(_get, urls[i:i + 32]):  # map keeps the order
+                    f.write(data)
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw, "-c", "copy",
                         "-movflags", "+faststart", out], check=True)
     return segs[0][0]

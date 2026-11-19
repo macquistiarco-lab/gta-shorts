@@ -58,5 +58,26 @@
       980,
       580
     ]
+  },
+  "lacy_gta6_chapter2": {
+    "streamer": "LACY",
+    "title": "GTA 6 MARATHON - IN MIAMI - CHAPTER 2 - LIVE 24/7",
+    "source_url": "https://www.twitch.tv/videos/2933767012",
+    "twitch_vod": "2933767012",
+    "quality": "720p60",
+    "campaign": "https://contentrewards.com/c/campaigns/a5c63fad-cd53-4b81-9305-4a2d1696872a",
+    "cam": [
+      0,
+      0,
+      330,
+      230
+    ],
+    "cam_w": 860,
+    "game": [
+      300,
+      140,
+      980,
+      580
+    ]
   }
 }

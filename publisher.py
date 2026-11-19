@@ -6,6 +6,12 @@
   python publisher.py 01_tiger --slot auto   # schedule one clip at the next free slot
   python publisher.py --all --slot auto      # every clip not in published.json
   python publisher.py --all --dry-run        # only print title / description / tags
+  python publisher.py lacy04 --at 2026-11-22T13:00:00Z        # exact time (UTC)
+  python publisher.py --all --slot auto --after 2026-11-20T00:00:00Z   # keep earlier slots empty
+  python publisher.py --move 03_plane 2026-11-23T13:00:00Z    # reschedule an uploaded clip
+  python publisher.py --queue                # upcoming schedule, Rome time
+
+Exit code 3 = YouTube's rolling 24-hour upload limit was hit: nothing uploaded, retry later.
 
 Credentials (environment variables, deliberately NOT the YT_* names of the finance channel):
   GTA_YT_CLIENT_ID, GTA_YT_CLIENT_SECRET, GTA_YT_REFRESH_TOKEN
@@ -165,19 +171,39 @@ def taken_times(token, uploads):
     return out
 
 
-def next_slot(taken):
+def next_slot(taken, after=None):
+    """First free slot >= after (default: now + MIN_LEAD). `after` lets the owner keep
+    a slot empty on purpose (e.g. tonight), which --slot auto would otherwise fill."""
     from zoneinfo import ZoneInfo
     tz = ZoneInfo(SLOT_TZ)
     now = dt.datetime.now(dt.timezone.utc)
+    floor = max(now + MIN_LEAD, after or now)
     day = now.astimezone(tz).date()
     for d in range(30):
         for s in SLOTS:
             hh, mm = map(int, s.split(":"))
             t = dt.datetime(day.year, day.month, day.day, hh, mm, tzinfo=tz) + dt.timedelta(days=d)
             t = t.astimezone(dt.timezone.utc)
-            if t - now >= MIN_LEAD and all(abs(t - x) > dt.timedelta(minutes=90) for x in taken):
+            if t >= floor and all(abs(t - x) > dt.timedelta(minutes=90) for x in taken):
                 return t
     sys.exit("no free slot in the next 30 days")
+
+
+def reschedule(token, vid, at):
+    """Move an already-uploaded, still scheduled video to a new publishAt (RFC3339 UTC)."""
+    h = {"Authorization": f"Bearer {token}"}
+    r = requests.get(f"{API}/videos", params={"part": "status", "id": vid}, headers=h, timeout=30)
+    r.raise_for_status()
+    cur = r.json()["items"][0]["status"]
+    if cur.get("privacyStatus") == "public":
+        sys.exit(f"{vid} is already public: it cannot be rescheduled")
+    body = {"id": vid, "status": {"privacyStatus": "private", "publishAt": at,
+            "selfDeclaredMadeForKids": cur.get("selfDeclaredMadeForKids", False),
+            "containsSyntheticMedia": cur.get("containsSyntheticMedia", False)}}
+    r = requests.put(f"{API}/videos", params={"part": "status"},
+                     headers={**h, "Content-Type": "application/json"}, data=json.dumps(body), timeout=30)
+    r.raise_for_status()
+    return r.json()["status"].get("publishAt")
 
 
 # ---------- upload ----------
@@ -198,6 +224,9 @@ def upload(video, meta, privacy, publish_at, token):
                                "X-Upload-Content-Length": str(size)},
                       data=json.dumps(body), timeout=60)
     if r.status_code != 200:
+        if "uploadLimitExceeded" in r.text:  # rolling 24h cap on new channels: retry later
+            log("YouTube upload limit reached (rolling 24 hours): nothing uploaded, retry later")
+            sys.exit(3)
         sys.exit(f"upload init failed: {r.status_code} {r.text}")
     with open(video, "rb") as f:
         r = requests.put(r.headers["Location"], headers={**h, "Content-Type": "video/mp4"},
@@ -217,6 +246,10 @@ def main():
     ap.add_argument("--slot", choices=["auto"], help="schedule at the next free slot (Rome time)")
     ap.add_argument("--at", help="schedule at this exact time, RFC3339 UTC e.g. 2026-11-20T17:00:00Z "
                                  "(use it when a free slot must stay empty)")
+    ap.add_argument("--after", help="with --slot auto: only use slots at or after this time (RFC3339 UTC)")
+    ap.add_argument("--move", nargs=2, action="append", metavar=("NAME", "AT"),
+                    help="reschedule an uploaded, not yet public clip (repeatable)")
+    ap.add_argument("--queue", action="store_true", help="print the publishing queue (Rome time)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     if a.auth:
@@ -227,6 +260,24 @@ def main():
     if a.whoami:
         ch = channel(access())
         return print(f"{ch['title']} {ch['id']} (GTA_CHANNEL_ID={env('GTA_CHANNEL_ID', False)})")
+    if a.queue:
+        from zoneinfo import ZoneInfo
+        now = dt.datetime.now(dt.timezone.utc)
+        for n, p in sorted(published.items(), key=lambda x: x[1].get("publish_at") or ""):
+            if p.get("publish_at") and _utc(p["publish_at"]) > now:
+                t = _utc(p["publish_at"]).astimezone(ZoneInfo(SLOT_TZ))
+                print(f"{t:%a %d %b %H:%M}  {n:16} {p['url']}")
+        pending = [n for n in clips if n not in published]
+        return print("not uploaded yet: " + (", ".join(pending) or "none"))
+    if a.move:
+        token = access()
+        checked_channel(token)
+        # move the latest slot first, so two clips never sit 90 min apart mid-swap
+        for n, at in sorted(a.move, key=lambda m: m[1], reverse=True):
+            published[n]["publish_at"] = reschedule(token, published[n]["id"], at)
+            json.dump(published, open(PUBLISHED, "w"), indent=1)
+            log(f"{n} -> {published[n]['publish_at']}")
+        return
     names = [n for n in clips if n not in published] if a.all else a.names
     if not names:
         sys.exit("nothing to publish")
@@ -251,7 +302,7 @@ def main():
             # the uploads playlist lags behind fresh uploads, so also count our own records
             taken = taken_times(token, ch["uploads"]) + [
                 _utc(p["publish_at"]) for p in published.values() if p.get("publish_at")]
-            at = next_slot(taken).strftime("%Y-%m-%dT%H:%M:%SZ")
+            at = next_slot(taken, _utc(a.after) if a.after else None).strftime("%Y-%m-%dT%H:%M:%SZ")
         log(f"uploading {n} ({os.path.getsize(video) / 1e6:.1f} MB, {at or a.privacy})")
         vid = upload(video, meta, a.privacy, at, token)
         published[n] = {"id": vid, "url": f"https://youtube.com/shorts/{vid}",
