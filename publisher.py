@@ -215,6 +215,8 @@ def main():
     ap.add_argument("--whoami", action="store_true")
     ap.add_argument("--privacy", default="public", choices=["public", "unlisted", "private"])
     ap.add_argument("--slot", choices=["auto"], help="schedule at the next free slot (Rome time)")
+    ap.add_argument("--at", help="schedule at this exact time, RFC3339 UTC e.g. 2026-11-20T17:00:00Z "
+                                 "(use it when a free slot must stay empty)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     if a.auth:
@@ -244,8 +246,8 @@ def main():
         video = os.path.join(HERE, "out", f"{n}.mp4")
         if not os.path.exists(video):
             sys.exit(f"{video} missing: run python clip.py {n}")
-        at = None
-        if a.slot:
+        at = a.at
+        if a.slot and not at:
             # the uploads playlist lags behind fresh uploads, so also count our own records
             taken = taken_times(token, ch["uploads"]) + [
                 _utc(p["publish_at"]) for p in published.values() if p.get("publish_at")]

@@ -204,5 +204,32 @@
    "gta",
    "gaming"
   ]
+ },
+ "lacy01_countdown": {
+  "stream": "lacy_gta6_marathon",
+  "start": 2855,
+  "end": 2940,
+  "cam": [
+   0,
+   0,
+   390,
+   216
+  ],
+  "game": [
+   300,
+   140,
+   980,
+   580
+  ],
+  "hook": "LACY'S GTA 6\\NCOUNTDOWN",
+  "title": "LACY's Final Seconds Before GTA 6",
+  "description": "LACY counts down the final seconds before GTA 6 unlocks: \"13 years of waiting.\"",
+  "hashtags": [
+   "LACY",
+   "gta6",
+   "lacy",
+   "gta",
+   "gaming"
+  ]
  }
 }
