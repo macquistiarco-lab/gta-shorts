@@ -61,23 +61,23 @@ PlayResY: {H}
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Cap,Inter Display,84,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,7,3,5,50,50,0,1
+Style: Cap,Inter Display,72,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,7,3,5,50,50,0,1
 Style: Hook,Inter Display,64,&H00FFFFFF,&H00FFFFFF,&H00000000,&HC0000000,-1,0,0,0,100,100,0,0,3,16,0,8,50,50,60,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     ev = [f"Dialogue: 1,{ts(0)},{ts(dur)},Hook,,0,0,0,,{hook}"]
-    # chunks of up to 3 words and ~16 characters (one line at 84 px), break on long pauses
+    # chunks of up to 3 words and ~19 characters (one line at 72 px), break on long pauses
     chunks, cur = [], []
     for w in words:
         width = sum(len(x["w"]) + 1 for x in cur) + len(w["w"])
-        if cur and (len(cur) == 3 or width > 16 or w["s"] - cur[-1]["e"] > 0.6):
+        if cur and (len(cur) == 3 or width > 19 or w["s"] - cur[-1]["e"] > 0.6):
             chunks.append(cur); cur = []
         cur.append(w)
     if cur: chunks.append(cur)
     # captions right under the webcam (owner's choice), over the top of the gameplay
-    capy = GAME_Y + 80
+    capy = GAME_Y + 70
     for ci, ch in enumerate(chunks):
         end_chunk = ch[-1]["e"] + 0.25
         if ci + 1 < len(chunks): end_chunk = min(end_chunk, chunks[ci + 1][0]["s"])
