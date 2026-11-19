@@ -16,6 +16,31 @@ from clip import HERE, source
 
 CHUNK = 1800  # seconds
 
+
+def refine(stream, a, b, model="small"):
+    """Re-transcribe [a, b] with a better model into data/<stream>.refined.json
+    (a separate file, so it never races with a long run rewriting the main transcript).
+    clip.py uses refined words for any clip window a refined range covers."""
+    wav = os.path.join(HERE, "src", f"{stream}.wav")
+    wf = wave.open(wav)
+    rate = wf.getframerate()
+    wf.setpos(int(a * rate))
+    audio = np.frombuffer(wf.readframes(int((b - a) * rate)), dtype=np.int16).astype(np.float32) / 32768.0
+    m = WhisperModel(model, download_root=os.path.join(HERE, "models"), device="cpu",
+                     compute_type="int8", cpu_threads=os.cpu_count())
+    segs, _ = m.transcribe(audio, language="en", word_timestamps=True, vad_filter=True, beam_size=5)
+    words = [{"w": w.word, "s": a + w.start, "e": a + w.end} for s in segs for w in s.words]
+    path = os.path.join(HERE, "data", f"{stream}.refined.json")
+    ref = json.load(open(path)) if os.path.exists(path) else []
+    ref = [r for r in ref if not (r["start"] <= a and r["end"] >= b)] + [{"start": a, "end": b, "words": words}]
+    json.dump(ref, open(path, "w"))
+    print(" ".join(w["w"].strip() for w in words))
+
+
+if len(sys.argv) > 2 and sys.argv[2] == "--refine":  # transcribe.py <stream> --refine <a> <b>
+    refine(sys.argv[1], float(sys.argv[3]), float(sys.argv[4]))
+    sys.exit()
+
 stream = sys.argv[1]
 model = sys.argv[2] if len(sys.argv) > 2 else "small"
 info = json.load(open(os.path.join(HERE, "data", "streams.json")))[stream]

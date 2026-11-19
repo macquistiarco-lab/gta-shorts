@@ -1,39 +1,163 @@
 {
-  "01_tiger": {
-    "stream": "ishowspeed_gta6_day1", "start": 1083, "end": 1121,
-    "hook": "SPEED FINDS A TIGER\\NIN GTA 6",
-    "title": "iShowSpeed Finds a TIGER in GTA 6",
-    "description": "Speed did NOT expect to find a tiger locked in a cage in GTA 6.",
-    "hashtags": ["gta6", "ishowspeed", "speed", "gta", "gaming"]
-  },
-  "02_launch": {
-    "stream": "ishowspeed_gta6_day1", "start": 0, "end": 36,
-    "hook": "SPEED OPENS GTA 6\\NFOR THE FIRST TIME",
-    "title": "iShowSpeed Opens GTA 6 For The First Time",
-    "description": "The countdown is over: Speed finally launches GTA 6.",
-    "hashtags": ["gta6", "ishowspeed", "speed", "gta", "gaming"]
-  },
-  "03_plane": {
-    "stream": "ishowspeed_gta6_day1", "start": 1609, "end": 1678.5,
-    "hook": "SPEED CAN'T FLY\\NIN GTA 6",
-    "drop": [[1637.2, 1640.0], [1641.6, 1645.6]],
-    "title": "iShowSpeed Tries to Fly a Plane in GTA 6",
-    "description": "\"I don't even know how to fly\" - Speed's first flight in GTA 6.",
-    "hashtags": ["gta6", "ishowspeed", "speed", "gta", "gaming"]
-  },
-  "04_graphics": {
-    "stream": "ishowspeed_gta6_day1", "start": 1999, "end": 2046,
-    "hook": "SPEED CAN'T BELIEVE\\NGTA 6 IS REAL",
-    "drop": [[2004.3, 2009.1], [2010.4, 2020.5], [2022.8, 2024.7], [2027.8, 2029.4], [2031.4, 2042.3]],
-    "title": "iShowSpeed Can't Believe GTA 6 Graphics",
-    "description": "Speed drives into the city for the first time: \"How is this game real?\"",
-    "hashtags": ["gta6", "ishowspeed", "speed", "gta", "gaming"]
-  },
-  "05_robbery": {
-    "stream": "ishowspeed_gta6_day1", "start": 281, "end": 342,
-    "hook": "SPEED'S FIRST ROBBERY\\NIN GTA 6",
-    "title": "iShowSpeed's First Robbery in GTA 6",
-    "description": "Speed's first stick-up in GTA 6 goes about as well as you'd expect.",
-    "hashtags": ["gta6", "ishowspeed", "speed", "gta", "gaming"]
-  }
+ "01_tiger": {
+  "stream": "ishowspeed_gta6_day1",
+  "start": 1083,
+  "end": 1121,
+  "hook": "SPEED FINDS A TIGER\\NIN GTA 6",
+  "title": "iShowSpeed Finds a TIGER in GTA 6",
+  "description": "Speed did NOT expect to find a tiger locked in a cage in GTA 6.",
+  "hashtags": [
+   "gta6",
+   "ishowspeed",
+   "speed",
+   "gta",
+   "gaming"
+  ]
+ },
+ "02_launch": {
+  "stream": "ishowspeed_gta6_day1",
+  "start": 0,
+  "end": 36,
+  "hook": "SPEED OPENS GTA 6\\NFOR THE FIRST TIME",
+  "title": "iShowSpeed Opens GTA 6 For The First Time",
+  "description": "The countdown is over: Speed finally launches GTA 6.",
+  "hashtags": [
+   "gta6",
+   "ishowspeed",
+   "speed",
+   "gta",
+   "gaming"
+  ]
+ },
+ "03_plane": {
+  "stream": "ishowspeed_gta6_day1",
+  "start": 1609,
+  "end": 1678.5,
+  "hook": "SPEED CAN'T FLY\\NIN GTA 6",
+  "drop": [
+   [
+    1637.2,
+    1640.0
+   ],
+   [
+    1641.6,
+    1645.6
+   ]
+  ],
+  "title": "iShowSpeed Tries to Fly a Plane in GTA 6",
+  "description": "\"I don't even know how to fly\" - Speed's first flight in GTA 6.",
+  "hashtags": [
+   "gta6",
+   "ishowspeed",
+   "speed",
+   "gta",
+   "gaming"
+  ]
+ },
+ "04_graphics": {
+  "stream": "ishowspeed_gta6_day1",
+  "start": 1999,
+  "end": 2046,
+  "hook": "SPEED CAN'T BELIEVE\\NGTA 6 IS REAL",
+  "drop": [
+   [
+    2004.3,
+    2009.1
+   ],
+   [
+    2010.4,
+    2020.5
+   ],
+   [
+    2022.8,
+    2024.7
+   ],
+   [
+    2027.8,
+    2029.4
+   ],
+   [
+    2031.4,
+    2042.3
+   ]
+  ],
+  "title": "iShowSpeed Can't Believe GTA 6 Graphics",
+  "description": "Speed drives into the city for the first time: \"How is this game real?\"",
+  "hashtags": [
+   "gta6",
+   "ishowspeed",
+   "speed",
+   "gta",
+   "gaming"
+  ]
+ },
+ "05_robbery": {
+  "stream": "ishowspeed_gta6_day1",
+  "start": 281,
+  "end": 342,
+  "hook": "SPEED'S FIRST ROBBERY\\NIN GTA 6",
+  "title": "iShowSpeed's First Robbery in GTA 6",
+  "description": "Speed's first stick-up in GTA 6 goes about as well as you'd expect.",
+  "hashtags": [
+   "gta6",
+   "ishowspeed",
+   "speed",
+   "gta",
+   "gaming"
+  ]
+ },
+ "yr01_countdown": {
+  "stream": "yourrage_gta6_day1",
+  "start": 4262,
+  "end": 4312,
+  "hook": "RAGE'S GTA 6\\NCOUNTDOWN",
+  "title": "YourRAGE Waited 13 Years For This GTA 6 Moment",
+  "description": "Rage counts down the final seconds before GTA 6 unlocks.",
+  "hashtags": [
+   "yourrage",
+   "gta6",
+   "rage",
+   "gta",
+   "gaming"
+  ],
+  "cam": [
+   40,
+   430,
+   360,
+   290
+  ],
+  "game": [
+   420,
+   110,
+   860,
+   600
+  ]
+ },
+ "yr02_yellow": {
+  "stream": "yourrage_gta6_day1",
+  "start": 4505,
+  "end": 4562,
+  "hook": "RAGE'S GTA 6\\NTURNED YELLOW",
+  "title": "YourRAGE's GTA 6 Turned YELLOW",
+  "description": "Rage's first GTA 6 cutscene goes yellow and blue and he can't figure out why.",
+  "hashtags": [
+   "yourrage",
+   "gta6",
+   "rage",
+   "gta",
+   "gaming"
+  ],
+  "cam": [
+   40,
+   430,
+   360,
+   290
+  ],
+  "game": [
+   420,
+   110,
+   860,
+   600
+  ]
+ }
 }

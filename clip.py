@@ -92,7 +92,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 def render(name, c):
     info = json.load(open(os.path.join(HERE, "data", "streams.json")))[c["stream"]]
     src, src_t0 = source(c["stream"], info, c["start"], c["end"])
-    CAM, GAME = info["cam"], info["game"]
+    CAM, GAME = c.get("cam", info["cam"]), c.get("game", info["game"])  # layouts change during a stream
     global CAM_H, GAME_Y, GAME_H
     CAM_W = info.get("cam_w", W)  # facecam width on screen (centered)
     GAME_W = W
@@ -101,6 +101,11 @@ def render(name, c):
     GAME_Y = CAM_Y + CAM_H + 12
     a, b = c["start"], c["end"]; dur = b - a
     tr = json.load(open(os.path.join(HERE, "data", f"{c['stream']}.transcript.json")))
+    ref_path = os.path.join(HERE, "data", f"{c['stream']}.refined.json")
+    for r in (json.load(open(ref_path)) if os.path.exists(ref_path) else []):
+        if r["start"] <= a and r["end"] >= b:  # better transcription of this window
+            tr = [{"words": r["words"]}]
+            break
     drop = c.get("drop", [])
     words, mutes = [], []
     for seg in tr:
