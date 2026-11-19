@@ -159,5 +159,35 @@
    860,
    600
   ]
+ },
+ "yr03_bucket": {
+  "stream": "yourrage_gta6_day1",
+  "start": 10280,
+  "end": 10368,
+  "hook": "RAGE FINDS A COURT\\NIN GTA 6",
+  "title": "YourRAGE Finds a Basketball Court in GTA 6",
+  "description": "Rage finds a basketball court in GTA 6 and immediately becomes a bucket.",
+  "hashtags": [
+   "yourrage",
+   "gta6",
+   "rage",
+   "gta",
+   "basketball"
+  ]
+ },
+ "yr04_gym": {
+  "stream": "yourrage_gta6_day1",
+  "start": 11400,
+  "end": 11482,
+  "hook": "RAGE HITS THE GYM\\NIN GTA 6",
+  "title": "YourRAGE Tries the GTA 6 Gym",
+  "description": "Rage takes Jason to the gym in GTA 6 and almost fails the last rep.",
+  "hashtags": [
+   "yourrage",
+   "gta6",
+   "rage",
+   "gta",
+   "gaming"
+  ]
  }
 }
