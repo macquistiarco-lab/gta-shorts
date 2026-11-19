@@ -30,7 +30,7 @@ TOKEN_URL = "https://oauth2.googleapis.com/token"
 API = "https://www.googleapis.com/youtube/v3"
 UPLOAD_URL = "https://www.googleapis.com/upload/youtube/v3/videos"
 CATEGORY_GAMING = "20"
-SLOTS = ["19:00", "23:00"]          # Rome time = 1pm and 5pm US Eastern
+SLOTS = ["14:00", "18:00"]          # Rome time = 8am and noon US Eastern
 SLOT_TZ = "Europe/Rome"
 MIN_LEAD = dt.timedelta(minutes=20)
 BASE_TAGS = ["shorts", "gta6", "gta", "gaming"]
