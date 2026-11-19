@@ -21,7 +21,8 @@ never use `YT_*` variables or `shorts-agent` scripts here; publisher.py only rea
 After publishing, adding clips or streams, or hitting the upload limit: `python dashboard.py > <scratchpad>/hud_state.json`,
 then ArtifactData on that URL: `set` hud/state from that file (read it first for `if_version`) and add one
 `feed/<id>` doc `{at, kind: publish|clip|stream|warn|info, text}` in short Italian. Not-yet-uploaded clips
-with a planned slot go in hud/plan `slots`. Scheduled tasks and sessions are read live by the page.
+with a planned slot go in hud/plan `slots`. Scheduled tasks are read live by the page; sessions are not
+(the connector blocks list_sessions for pages): refresh hud/sessions `{saved_at, items}` from list_sessions.
 
 ## New stream ("nuove clip da <link>")
 1. Twitch VOD: find the id (`yt-dlp --flat-playlist -J "https://www.twitch.tv/<user>/videos?filter=archives"`),
