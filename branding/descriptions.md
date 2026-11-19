@@ -5,8 +5,8 @@
 **Bio** (max 80 characters):
 
 ```
-🌴 The craziest GTA 6 stream moments
-🔥 New clips every day
+🌴 Craziest GTA 6 stream moments
+🔥 New clips daily
 ▶️ YouTube: @GTAVICLIPS-s8w
 ```
 
