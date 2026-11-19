@@ -68,14 +68,16 @@ Style: Hook,Inter Display,64,&H00FFFFFF,&H00FFFFFF,&H00000000,&HC0000000,-1,0,0,
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
     ev = [f"Dialogue: 1,{ts(0)},{ts(dur)},Hook,,0,0,0,,{hook}"]
-    # chunks of up to 3 words, break on long pauses
+    # chunks of up to 3 words and ~16 characters (one line at 84 px), break on long pauses
     chunks, cur = [], []
     for w in words:
-        if cur and (len(cur) == 3 or w["s"] - cur[-1]["e"] > 0.6):
+        width = sum(len(x["w"]) + 1 for x in cur) + len(w["w"])
+        if cur and (len(cur) == 3 or width > 16 or w["s"] - cur[-1]["e"] > 0.6):
             chunks.append(cur); cur = []
         cur.append(w)
     if cur: chunks.append(cur)
-    capy = GAME_Y + GAME_H + (H - GAME_Y - GAME_H) // 2
+    # captions right under the webcam (owner's choice), over the top of the gameplay
+    capy = GAME_Y + 80
     for ci, ch in enumerate(chunks):
         end_chunk = ch[-1]["e"] + 0.25
         if ci + 1 < len(chunks): end_chunk = min(end_chunk, chunks[ci + 1][0]["s"])
