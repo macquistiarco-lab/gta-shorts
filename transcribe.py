@@ -61,6 +61,8 @@ t0 = done_until
 while t0 < total:
     wf.setpos(int(t0 * rate))
     n = int(min(CHUNK, total - t0) * rate)
+    if n <= 0:  # less than one sample left: done (without this it looped forever)
+        break
     audio = np.frombuffer(wf.readframes(n), dtype=np.int16).astype(np.float32) / 32768.0
     segs, _ = m.transcribe(audio, language="en", word_timestamps=True, vad_filter=True, beam_size=1)
     for s in segs:
@@ -68,7 +70,8 @@ while t0 < total:
                     "words": [{"w": w.word, "s": t0 + w.start, "e": t0 + w.end} for w in s.words]})
         print(f"[{t0 + s.start:7.1f}] {s.text.strip()}", flush=True)
     t0 += n / rate
-    json.dump(out, open(out_path, "w"))
+    json.dump(out, open(out_path + ".tmp", "w"))  # write then rename: a kill never leaves half a file
+    os.replace(out_path + ".tmp", out_path)
     open(state_path, "w").write(str(t0))
     print(f"CHUNK {t0:.0f}/{total:.0f}", flush=True)
 os.remove(state_path)
