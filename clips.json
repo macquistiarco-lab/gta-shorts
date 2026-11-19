@@ -258,5 +258,32 @@
    "gta",
    "gaming"
   ]
+ },
+ "lacy03_gator": {
+  "stream": "lacy_gta6_marathon",
+  "start": 30790,
+  "end": 30876,
+  "cam": [
+   0,
+   0,
+   334,
+   188
+  ],
+  "game": [
+   300,
+   140,
+   980,
+   580
+  ],
+  "hook": "LACY TRIES TO PET\\NAN ALLIGATOR",
+  "title": "LACY Tried to Pet an Alligator in GTA 6",
+  "description": "LACY: \"Can I pet you, little buddy?\" The alligator had other plans.",
+  "hashtags": [
+   "LACY",
+   "gta6",
+   "lacy",
+   "gta",
+   "gaming"
+  ]
  }
 }
