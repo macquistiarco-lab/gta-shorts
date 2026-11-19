@@ -246,7 +246,10 @@ def main():
             sys.exit(f"{video} missing: run python clip.py {n}")
         at = None
         if a.slot:
-            at = next_slot(taken_times(token, ch["uploads"])).strftime("%Y-%m-%dT%H:%M:%SZ")
+            # the uploads playlist lags behind fresh uploads, so also count our own records
+            taken = taken_times(token, ch["uploads"]) + [
+                _utc(p["publish_at"]) for p in published.values() if p.get("publish_at")]
+            at = next_slot(taken).strftime("%Y-%m-%dT%H:%M:%SZ")
         log(f"uploading {n} ({os.path.getsize(video) / 1e6:.1f} MB, {at or a.privacy})")
         vid = upload(video, meta, a.privacy, at, token)
         published[n] = {"id": vid, "url": f"https://youtube.com/shorts/{vid}",
