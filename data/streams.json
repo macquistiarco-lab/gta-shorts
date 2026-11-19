@@ -37,5 +37,26 @@
       980,
       600
     ]
+  },
+  "lacy_gta6_marathon": {
+    "streamer": "LACY",
+    "title": "GTA 6 EARLY ACCESS - FIRST TIME EVER - 24/7 MARATHON",
+    "source_url": "https://www.twitch.tv/videos/2932194507",
+    "twitch_vod": "2932194507",
+    "quality": "720p60",
+    "campaign": "https://contentrewards.com/c/campaigns/a5c63fad-cd53-4b81-9305-4a2d1696872a",
+    "cam": [
+      0,
+      0,
+      330,
+      230
+    ],
+    "cam_w": 860,
+    "game": [
+      300,
+      140,
+      980,
+      580
+    ]
   }
 }
