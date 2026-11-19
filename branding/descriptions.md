@@ -31,9 +31,9 @@ Rage moments, insane chases, glitches, "bro WHAT" reactions: only the best part,
 🔔 Subscribe and turn on notifications so you don't miss a clip
 
 📱 Watch even more clips on TikTok:
-https://www.tiktok.com/@TIKTOK_HANDLE
+https://www.tiktok.com/@gta_vi_clips52
 ```
 
 **Links** (Customize channel → Profile → Links):
 - Title: `TikTok`
-- URL: `https://www.tiktok.com/@TIKTOK_HANDLE`
+- URL: `https://www.tiktok.com/@gta_vi_clips52`
