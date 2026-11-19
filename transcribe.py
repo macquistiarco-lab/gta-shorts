@@ -1,6 +1,7 @@
 """Transcribe a stream with word timestamps -> data/<stream>.transcript.json
 
   python transcribe.py ishowspeed_gta6_day1 [model]   # model: small (default), base.en for long VODs
+  python transcribe.py <stream> base.en --resume-from 8400   # live VOD grew: redo from 8400 s on
 
 Works in 30-minute chunks: memory stays low on 9-hour VODs (the whole file at once
 was OOM-killed), the JSON is rewritten after every chunk so clips can be picked while it
@@ -52,6 +53,9 @@ out_path = os.path.join(HERE, "data", f"{stream}.transcript.json")
 state_path = out_path + ".progress"
 out = json.load(open(out_path)) if os.path.exists(state_path) else []
 done_until = float(open(state_path).read()) if os.path.exists(state_path) else 0.0
+if "--resume-from" in sys.argv:  # a live VOD grew: keep segments before X, transcribe from X on
+    done_until = float(sys.argv[sys.argv.index("--resume-from") + 1])
+    out = [s for s in json.load(open(out_path)) if s["start"] < done_until]
 
 m = WhisperModel(model, download_root=os.path.join(HERE, "models"), device="cpu",
                  compute_type="int8", cpu_threads=os.cpu_count())
