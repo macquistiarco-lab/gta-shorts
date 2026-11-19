@@ -2,7 +2,9 @@
 
   python transcribe.py ishowspeed_gta6_day1 [model]   # model: small (default), base.en for long VODs
 
-Runs on CPU (faster-whisper "small", int8): about 15 minutes for 35 minutes of audio.
+Works in 30-minute chunks: memory stays low on 9-hour VODs (the whole file at once
+was OOM-killed), the JSON is rewritten after every chunk so clips can be picked while it
+runs, and a rerun resumes after the last finished chunk.
 The model downloads from huggingface the first time (HF_HUB_DISABLE_XET=1 is set because
 the xet host is not on the environment's allowlist).
 """
@@ -12,6 +14,8 @@ import numpy as np
 from faster_whisper import WhisperModel
 from clip import HERE, source
 
+CHUNK = 1800  # seconds
+
 stream = sys.argv[1]
 model = sys.argv[2] if len(sys.argv) > 2 else "small"
 info = json.load(open(os.path.join(HERE, "data", "streams.json")))[stream]
@@ -19,15 +23,28 @@ wav = os.path.join(HERE, "src", f"{stream}.wav")
 if not os.path.exists(wav):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", source(stream, info)[0], "-vn", "-ac", "1",
                     "-ar", "16000", wav], check=True)
-wf = wave.open(wav)
-audio = np.frombuffer(wf.readframes(wf.getnframes()), dtype=np.int16).astype(np.float32) / 32768.0
+out_path = os.path.join(HERE, "data", f"{stream}.transcript.json")
+state_path = out_path + ".progress"
+out = json.load(open(out_path)) if os.path.exists(state_path) else []
+done_until = float(open(state_path).read()) if os.path.exists(state_path) else 0.0
+
 m = WhisperModel(model, download_root=os.path.join(HERE, "models"), device="cpu",
                  compute_type="int8", cpu_threads=os.cpu_count())
-segs, _ = m.transcribe(audio, language="en", word_timestamps=True, vad_filter=True, beam_size=1)
-out = []
-for s in segs:
-    out.append({"start": s.start, "end": s.end, "text": s.text.strip(),
-                "words": [{"w": w.word, "s": w.start, "e": w.end} for w in s.words]})
-    print(f"[{s.start:7.1f}] {s.text.strip()}", flush=True)
-json.dump(out, open(os.path.join(HERE, "data", f"{stream}.transcript.json"), "w"))
+wf = wave.open(wav)
+rate, total = wf.getframerate(), wf.getnframes() / wf.getframerate()
+t0 = done_until
+while t0 < total:
+    wf.setpos(int(t0 * rate))
+    n = int(min(CHUNK, total - t0) * rate)
+    audio = np.frombuffer(wf.readframes(n), dtype=np.int16).astype(np.float32) / 32768.0
+    segs, _ = m.transcribe(audio, language="en", word_timestamps=True, vad_filter=True, beam_size=1)
+    for s in segs:
+        out.append({"start": t0 + s.start, "end": t0 + s.end, "text": s.text.strip(),
+                    "words": [{"w": w.word, "s": t0 + w.start, "e": t0 + w.end} for w in s.words]})
+        print(f"[{t0 + s.start:7.1f}] {s.text.strip()}", flush=True)
+    t0 += n / rate
+    json.dump(out, open(out_path, "w"))
+    open(state_path, "w").write(str(t0))
+    print(f"CHUNK {t0:.0f}/{total:.0f}", flush=True)
+os.remove(state_path)
 print("DONE")
