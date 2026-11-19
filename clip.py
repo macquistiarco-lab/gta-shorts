@@ -40,6 +40,14 @@ def source(stream, info, a=None, b=None):
     return path, 0.0
 
 
+# words muted in the audio and replaced by **** in the captions (slurs, not plain swearing)
+SLURS = ("nigga", "nigger", "niggas", "retard", "faggot", "fag")
+
+
+def mute_filter(mutes):
+    return "".join(f"volume=enable='between(t,{x:.2f},{y:.2f})':volume=0," for x, y in mutes)
+
+
 def ts(t):
     h = int(t // 3600); m = int(t % 3600 // 60); s = t % 60
     return f"{h}:{m:02d}:{s:05.2f}"
@@ -94,11 +102,14 @@ def render(name, c):
     a, b = c["start"], c["end"]; dur = b - a
     tr = json.load(open(os.path.join(HERE, "data", f"{c['stream']}.transcript.json")))
     drop = c.get("drop", [])
-    words = []
+    words, mutes = [], []
     for seg in tr:
         for w in seg["words"]:
             if w["s"] >= a and w["e"] <= b and not any(x <= w["s"] < y for x, y in drop):
                 t = w["w"].strip()
+                if any(sl in t.lower() for sl in SLURS):  # bleep in the audio, hide in captions
+                    mutes.append((max(0, w["s"] - a - 0.05), w["e"] - a + 0.05))
+                    t = "****"
                 for bad, ok in (("motherfucker", "MOTHERF*CKER"), ("fucking", "F*CKING"), ("fuck", "F*CK"),
                                 ("shit", "SH*T"), ("bitch", "B*TCH"), ("dick", "D*CK"), ("ass", "A*S")):
                     if bad in t.lower() and not (bad == "ass" and t.lower().strip(",.!?") != "ass"):
@@ -114,7 +125,7 @@ def render(name, c):
           f"[b]crop={cw}:{ch}:{cx}:{cy},scale={CAM_W}:{CAM_H}:flags=lanczos,unsharp=5:5:0.8[cam];"
           f"[c]crop={gw}:{gh}:{gx}:{gy},scale={GAME_W}:{GAME_H}:flags=lanczos[game];"
           f"[bg][cam]overlay={(W - CAM_W) // 2}:{CAM_Y}[t1];[t1][game]overlay=0:{GAME_Y},subtitles={sub}[v];"
-          f"[0:a]loudnorm=I=-14:TP=-1.5:LRA=11[au]")
+          f"[0:a]{mute_filter(mutes)}loudnorm=I=-14:TP=-1.5:LRA=11[au]")
     out = os.path.join(HERE, "out", f"{name}.mp4")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a - src_t0:.3f}", "-t", str(dur), "-i", src,
                     "-filter_complex", fc, "-map", "[v]", "-map", "[au]",
