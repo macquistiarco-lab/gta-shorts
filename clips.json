@@ -312,5 +312,32 @@
    "gta",
    "gaming"
   ]
+ },
+ "lacy05_hi": {
+  "stream": "lacy_gta6_chapter2",
+  "start": 40660,
+  "end": 40712,
+  "cam": [
+   0,
+   0,
+   334,
+   188
+  ],
+  "game": [
+   300,
+   140,
+   980,
+   580
+  ],
+  "hook": "LACY SAID HI\\NIN GTA 6",
+  "title": "LACY Just Said Hi in GTA 6",
+  "description": "LACY: \"How's it going you two?\" GTA 6 locals: absolutely not.",
+  "hashtags": [
+   "LACY",
+   "gta6",
+   "lacy",
+   "gta",
+   "gaming"
+  ]
  }
 }
