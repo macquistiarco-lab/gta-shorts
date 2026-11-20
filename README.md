@@ -2,6 +2,9 @@
 
 Turns GTA 6 streams into vertical YouTube Shorts: facecam on top, gameplay below,
 word-by-word captions of what the streamer says (swear words masked, slurs muted in the audio).
+Default layout `split` (from the owner's reference Short): webcam full width in the top 40%,
+gameplay filling the rest, no title bar, captions on the gameplay with a small "via <streamer>"
+credit. `"layout": "classic"` (in a stream or clip) keeps the old blurred-background layout.
 Separate from the finance channel (`shorts-agent`): own repo, own cloud environment, own credentials.
 
 ## Pipeline

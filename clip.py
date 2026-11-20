@@ -15,6 +15,7 @@ import json, subprocess, sys, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 W, H = 1080, 1920
 CAM_Y = 230
+SPLIT_Y = 770  # split layout: height of the webcam band (40% of 1920, as in the reference Short)
 
 
 def source(stream, info, a=None, b=None):
@@ -53,7 +54,9 @@ def ts(t):
     return f"{h}:{m:02d}:{s:05.2f}"
 
 
-def ass(words, hook, dur, path):
+def ass(words, hook, dur, path, capy, credit=None):
+    """hook: title bar at the top (classic layout) or None; credit: small "via <streamer>"
+    line under the captions (split layout)."""
     head = f"""[Script Info]
 ScriptType: v4.00+
 PlayResX: {W}
@@ -63,11 +66,16 @@ PlayResY: {H}
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Cap,Inter Display,72,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,7,3,5,50,50,0,1
 Style: Hook,Inter Display,64,&H00FFFFFF,&H00FFFFFF,&H00000000,&HC0000000,-1,0,0,0,100,100,0,0,3,16,0,8,50,50,60,1
+Style: Credit,Inter Display,38,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,3,1,5,50,50,0,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
-    ev = [f"Dialogue: 1,{ts(0)},{ts(dur)},Hook,,0,0,0,,{hook}"]
+    ev = []
+    if hook:
+        ev.append(f"Dialogue: 1,{ts(0)},{ts(dur)},Hook,,0,0,0,,{hook}")
+    if credit:
+        ev.append(f"Dialogue: 1,{ts(0)},{ts(dur)},Credit,,0,0,0,,{{\\pos({W//2},{capy + 105})}}{credit}")
     # chunks of up to 3 words and ~19 characters (one line at 72 px), break on long pauses
     chunks, cur = [], []
     for w in words:
@@ -76,8 +84,6 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             chunks.append(cur); cur = []
         cur.append(w)
     if cur: chunks.append(cur)
-    # captions right under the webcam (owner's choice), over the top of the gameplay
-    capy = GAME_Y + 70
     for ci, ch in enumerate(chunks):
         end_chunk = ch[-1]["e"] + 0.25
         if ci + 1 < len(chunks): end_chunk = min(end_chunk, chunks[ci + 1][0]["s"])
@@ -125,14 +131,28 @@ def render(name, c):
                 if t: words.append({"w": t.replace("{", "").replace("}", ""), "s": w["s"] - a, "e": w["e"] - a})
     os.makedirs(os.path.join(HERE, "out"), exist_ok=True)
     sub = os.path.join(HERE, "out", f"{name}.ass")
-    ass(words, c["hook"], dur, sub)
     cx, cy, cw, ch = CAM; gx, gy, gw, gh = GAME
-    fc = (f"[0:v]split=3[a][b][c];"
-          f"[a]crop={gw}:{gh}:{gx}:{gy},scale=-2:{H},crop={W}:{H},boxblur=20:2,eq=brightness=-0.25[bg];"
-          f"[b]crop={cw}:{ch}:{cx}:{cy},scale={CAM_W}:{CAM_H}:flags=lanczos,unsharp=5:5:0.8[cam];"
-          f"[c]crop={gw}:{gh}:{gx}:{gy},scale={GAME_W}:{GAME_H}:flags=lanczos[game];"
-          f"[bg][cam]overlay={(W - CAM_W) // 2}:{CAM_Y}[t1];[t1][game]overlay=0:{GAME_Y},subtitles={sub}[v];"
-          f"[0:a]{mute_filter(mutes)}loudnorm=I=-14:TP=-1.5:LRA=11[au]")
+    layout = c.get("layout", info.get("layout", "split"))
+    if layout == "split":
+        # owner's reference layout: webcam full width on top (40%), gameplay filling the rest,
+        # no blurred background and no title bar; captions on the gameplay with a small
+        # "via <streamer>" credit under them (campaigns want the name on screen)
+        ass(words, None, dur, sub, SPLIT_Y + 410, credit=f"via {info['streamer']}")
+        fc = (f"[0:v]split=2[b][c];"
+              f"[b]crop={cw}:{ch}:{cx}:{cy},scale={W}:{SPLIT_Y}:force_original_aspect_ratio=increase:"
+              f"flags=lanczos,crop={W}:{SPLIT_Y},unsharp=5:5:0.8[cam];"
+              f"[c]crop={gw}:{gh}:{gx}:{gy},scale={W}:{H - SPLIT_Y}:force_original_aspect_ratio=increase:"
+              f"flags=lanczos,crop={W}:{H - SPLIT_Y}[game];"
+              f"[cam][game]vstack,subtitles={sub}[v];"
+              f"[0:a]{mute_filter(mutes)}loudnorm=I=-14:TP=-1.5:LRA=11[au]")
+    else:  # classic: blurred background, centered facecam, title bar, captions under the webcam
+        ass(words, c["hook"], dur, sub, GAME_Y + 70)
+        fc = (f"[0:v]split=3[a][b][c];"
+              f"[a]crop={gw}:{gh}:{gx}:{gy},scale=-2:{H},crop={W}:{H},boxblur=20:2,eq=brightness=-0.25[bg];"
+              f"[b]crop={cw}:{ch}:{cx}:{cy},scale={CAM_W}:{CAM_H}:flags=lanczos,unsharp=5:5:0.8[cam];"
+              f"[c]crop={gw}:{gh}:{gx}:{gy},scale={GAME_W}:{GAME_H}:flags=lanczos[game];"
+              f"[bg][cam]overlay={(W - CAM_W) // 2}:{CAM_Y}[t1];[t1][game]overlay=0:{GAME_Y},subtitles={sub}[v];"
+              f"[0:a]{mute_filter(mutes)}loudnorm=I=-14:TP=-1.5:LRA=11[au]")
     out = os.path.join(HERE, "out", f"{name}.mp4")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a - src_t0:.3f}", "-t", str(dur), "-i", src,
                     "-filter_complex", fc, "-map", "[v]", "-map", "[au]",
