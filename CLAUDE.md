@@ -23,6 +23,8 @@ then ArtifactData on that URL: `set` hud/state from that file (read it first for
 `feed/<id>` doc `{at, kind: publish|clip|stream|warn|info, text}` in short Italian. Not-yet-uploaded clips
 with a planned slot go in hud/plan `slots`. Scheduled tasks are read live by the page; sessions are not
 (the connector blocks list_sessions for pages): refresh hud/sessions `{saved_at, items}` from list_sessions.
+Channel stats: `python yt_stats.py > <scratchpad>/yt.json`, `set` hud/youtube from it, and add
+`ythist/<YYYYMMDDHHMM>` `{at, subscribers, views, video_views (sum over public videos), videos}`.
 
 ## New stream ("nuove clip da <link>")
 1. Twitch VOD: find the id (`yt-dlp --flat-playlist -J "https://www.twitch.tv/<user>/videos?filter=archives"`),
