@@ -134,7 +134,19 @@ def render(name, c):
     sub = os.path.join(HERE, "out", f"{name}.ass")
     cx, cy, cw, ch = CAM; gx, gy, gw, gh = GAME
     layout = c.get("layout", info.get("layout", "split"))
-    if layout == "split":
+    if layout == "full":
+        # "camera mode" moments (streamer talking to chat, game hidden): the `cam` box fills
+        # the whole 9:16 frame; captions in the lower third, campaign badge under them
+        overlay = info.get("overlay")
+        ass(words, None, dur, sub, int(H * 0.66), credit=None if overlay else f"via {info['streamer']}")
+        fc = (f"[0:v]crop={cw}:{ch}:{cx}:{cy},scale={W}:{H}:force_original_aspect_ratio=increase:"
+              f"flags=lanczos,crop={W}:{H},unsharp=5:5:0.6,subtitles={sub}[st];")
+        if overlay:
+            fc += f"[1:v]scale={OVERLAY_W}:-2[ov];[st][ov]overlay=(W-w)/2:{int(H * 0.78)}-h/2[v];"
+        else:
+            fc += "[st]null[v];"
+        fc += f"[0:a]{mute_filter(mutes)}loudnorm=I=-14:TP=-1.5:LRA=11[au]"
+    elif layout == "split":
         # owner's reference layout: webcam full width on top (40%), gameplay filling the rest,
         # no blurred background and no title bar; captions on the gameplay with a small
         # "via <streamer>" credit under them (campaigns want the name on screen)
@@ -162,7 +174,7 @@ def render(name, c):
               f"[bg][cam]overlay={(W - CAM_W) // 2}:{CAM_Y}[t1];[t1][game]overlay=0:{GAME_Y},subtitles={sub}[v];"
               f"[0:a]{mute_filter(mutes)}loudnorm=I=-14:TP=-1.5:LRA=11[au]")
     out = os.path.join(HERE, "out", f"{name}.mp4")
-    extra = ["-i", os.path.join(HERE, info["overlay"])] if layout == "split" and info.get("overlay") else []
+    extra = ["-i", os.path.join(HERE, info["overlay"])] if layout in ("split", "full") and info.get("overlay") else []
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a - src_t0:.3f}", "-t", str(dur), "-i", src,
                     *extra, "-filter_complex", fc, "-map", "[v]", "-map", "[au]",
                     "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-r", "30",

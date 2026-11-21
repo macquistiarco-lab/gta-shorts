@@ -339,5 +339,77 @@
    "gta",
    "gaming"
   ]
+ },
+ "boeshi01_mute": {
+  "stream": "boeshi_gta6_leaked1",
+  "start": 15203,
+  "end": 15264,
+  "layout": "full",
+  "cam": [
+   180,
+   0,
+   600,
+   640
+  ],
+  "hook": "",
+  "title": "Chat Thought Boeshi Was Mute \ud83d\udc80",
+  "description": "Chat keeps roasting Boeshi's voice and he has had enough. Full stream at twitch.tv/darealboeshi",
+  "hashtags": [
+   "boeshi",
+   "gta6",
+   "twitch",
+   "streamer",
+   "gaming"
+  ]
+ },
+ "boeshi02_myvoice": {
+  "stream": "boeshi_gta6_leaked1",
+  "start": 125,
+  "end": 178,
+  "layout": "full",
+  "cam": [
+   120,
+   0,
+   600,
+   640
+  ],
+  "hook": "",
+  "title": "\"Is That My Voice?\" - Boeshi Starts GTA 6",
+  "description": "Boeshi opens his GTA 6 stream and chat goes straight for the voice. Full stream at twitch.tv/darealboeshi",
+  "hashtags": [
+   "boeshi",
+   "gta6",
+   "twitch",
+   "streamer",
+   "gaming"
+  ]
+ },
+ "boeshi03_buff": {
+  "stream": "boeshi_gta6_leaked1",
+  "start": 14236,
+  "end": 14280,
+  "layout": "full",
+  "cam": [
+   260,
+   0,
+   600,
+   640
+  ],
+  "hook": "",
+  "drop": [
+   [
+    14248.5,
+    14253
+   ]
+  ],
+  "title": "\"Your Voice Ruins It\" - Boeshi Disagrees",
+  "description": "Chat says Boeshi looks buff but the voice ruins it. He does not agree. Full stream at twitch.tv/darealboeshi",
+  "hashtags": [
+   "boeshi",
+   "gta6",
+   "twitch",
+   "streamer",
+   "gaming"
+  ]
  }
 }
