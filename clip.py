@@ -16,6 +16,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 W, H = 1080, 1920
 CAM_Y = 230
 SPLIT_Y = 770  # split layout: height of the webcam band (40% of 1920, as in the reference Short)
+OVERLAY_W = 620  # campaign badge width on screen (split layout)
 
 
 def source(stream, info, a=None, b=None):
@@ -137,14 +138,21 @@ def render(name, c):
         # owner's reference layout: webcam full width on top (40%), gameplay filling the rest,
         # no blurred background and no title bar; captions on the gameplay with a small
         # "via <streamer>" credit under them (campaigns want the name on screen)
-        ass(words, None, dur, sub, SPLIT_Y + 410, credit=f"via {info['streamer']}")
+        overlay = info.get("overlay")  # campaign badge (e.g. Twitch handle), required on screen
+        # with a badge the streamer's name is already on screen: no "via" credit
+        ass(words, None, dur, sub, SPLIT_Y + 410, credit=None if overlay else f"via {info['streamer']}")
         fc = (f"[0:v]split=2[b][c];"
               f"[b]crop={cw}:{ch}:{cx}:{cy},scale={W}:{SPLIT_Y}:force_original_aspect_ratio=increase:"
               f"flags=lanczos,crop={W}:{SPLIT_Y},unsharp=5:5:0.8[cam];"
               f"[c]crop={gw}:{gh}:{gx}:{gy},scale={W}:{H - SPLIT_Y}:force_original_aspect_ratio=increase:"
               f"flags=lanczos,crop={W}:{H - SPLIT_Y}[game];"
-              f"[cam][game]vstack,subtitles={sub}[v];"
-              f"[0:a]{mute_filter(mutes)}loudnorm=I=-14:TP=-1.5:LRA=11[au]")
+              f"[cam][game]vstack,subtitles={sub}[st];")
+        if overlay:  # centred on the seam between webcam and gameplay, visible the whole clip
+            fc += (f"[1:v]scale={OVERLAY_W}:-2[ov];"
+                   f"[st][ov]overlay=(W-w)/2:{SPLIT_Y}-h/2[v];")
+        else:
+            fc += "[st]null[v];"
+        fc += f"[0:a]{mute_filter(mutes)}loudnorm=I=-14:TP=-1.5:LRA=11[au]"
     else:  # classic: blurred background, centered facecam, title bar, captions under the webcam
         ass(words, c["hook"], dur, sub, GAME_Y + 70)
         fc = (f"[0:v]split=3[a][b][c];"
@@ -154,8 +162,9 @@ def render(name, c):
               f"[bg][cam]overlay={(W - CAM_W) // 2}:{CAM_Y}[t1];[t1][game]overlay=0:{GAME_Y},subtitles={sub}[v];"
               f"[0:a]{mute_filter(mutes)}loudnorm=I=-14:TP=-1.5:LRA=11[au]")
     out = os.path.join(HERE, "out", f"{name}.mp4")
+    extra = ["-i", os.path.join(HERE, info["overlay"])] if layout == "split" and info.get("overlay") else []
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a - src_t0:.3f}", "-t", str(dur), "-i", src,
-                    "-filter_complex", fc, "-map", "[v]", "-map", "[au]",
+                    *extra, "-filter_complex", fc, "-map", "[v]", "-map", "[au]",
                     "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-r", "30",
                     "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", out], check=True)
     print(out, flush=True)

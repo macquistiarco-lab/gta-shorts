@@ -79,5 +79,68 @@
       980,
       580
     ]
+  },
+  "boeshi_gta6_3am": {
+    "streamer": "Boeshi",
+    "title": "Streaming GTA 6 At 3AM (GONE WRONG)",
+    "source_url": "https://www.twitch.tv/videos/2935956182",
+    "twitch_vod": "2935956182",
+    "quality": "720p60",
+    "campaign": "campaigns/boeshi_gta6.md",
+    "overlay": "assets/boeshi_overlay.png",
+    "cam": [
+      10,
+      90,
+      272,
+      190
+    ],
+    "game": [
+      300,
+      0,
+      980,
+      640
+    ]
+  },
+  "boeshi_gta6_leaked1": {
+    "streamer": "Boeshi",
+    "title": "GTA 6 Leaked",
+    "source_url": "https://www.twitch.tv/videos/2934693823",
+    "twitch_vod": "2934693823",
+    "quality": "720p60",
+    "campaign": "campaigns/boeshi_gta6.md",
+    "overlay": "assets/boeshi_overlay.png",
+    "cam": [
+      10,
+      90,
+      272,
+      190
+    ],
+    "game": [
+      300,
+      0,
+      980,
+      640
+    ]
+  },
+  "boeshi_gta6_leaked2": {
+    "streamer": "Boeshi",
+    "title": "GTA 6 Leaked",
+    "source_url": "https://www.twitch.tv/videos/2933399801",
+    "twitch_vod": "2933399801",
+    "quality": "720p60",
+    "campaign": "campaigns/boeshi_gta6.md",
+    "overlay": "assets/boeshi_overlay.png",
+    "cam": [
+      10,
+      90,
+      272,
+      190
+    ],
+    "game": [
+      300,
+      0,
+      980,
+      640
+    ]
   }
 }
