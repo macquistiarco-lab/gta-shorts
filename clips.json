@@ -411,5 +411,59 @@
    "streamer",
    "gaming"
   ]
+ },
+ "boeshi04_cops": {
+  "stream": "boeshi_gta6_3am",
+  "start": 3401,
+  "end": 3480,
+  "cam": [
+   0,
+   95,
+   280,
+   185
+  ],
+  "game": [
+   300,
+   0,
+   980,
+   640
+  ],
+  "hook": "",
+  "title": "Boeshi vs The Most Advanced Cops in GTA 6",
+  "description": "\"I'm a good boy, I didn't even do anything.\" GTA 6 cops did not agree. Full stream at twitch.tv/darealboeshi",
+  "hashtags": [
+   "boeshi",
+   "gta6",
+   "gta",
+   "twitch",
+   "gaming"
+  ]
+ },
+ "boeshi05_plane": {
+  "stream": "boeshi_gta6_leaked2",
+  "start": 1724,
+  "end": 1802,
+  "cam": [
+   0,
+   95,
+   280,
+   185
+  ],
+  "game": [
+   300,
+   0,
+   980,
+   640
+  ],
+  "hook": "",
+  "title": "Boeshi Tries to Get on a Plane in GTA 6",
+  "description": "\"I haven't used a controller in years.\" It shows. Full stream at twitch.tv/darealboeshi",
+  "hashtags": [
+   "boeshi",
+   "gta6",
+   "gta",
+   "twitch",
+   "gaming"
+  ]
  }
 }
