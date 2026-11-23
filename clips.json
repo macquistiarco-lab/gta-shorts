@@ -462,5 +462,59 @@
    "twitch",
    "gaming"
   ]
+ },
+ "boeshi09_bench": {
+  "stream": "boeshi_gta6_goneright",
+  "hook": "",
+  "cam": [
+   0,
+   95,
+   280,
+   185
+  ],
+  "game": [
+   300,
+   0,
+   980,
+   640
+  ],
+  "hashtags": [
+   "boeshi",
+   "gta6",
+   "gta",
+   "twitch",
+   "gaming"
+  ],
+  "start": 9953,
+  "end": 10030,
+  "title": "Boeshi Hits Bench Press in GTA 6 \ud83d\udcaa",
+  "description": "One more rep. Come on. COME ON. Boeshi takes GTA 6 gym day very seriously. Full stream at twitch.tv/darealboeshi"
+ },
+ "boeshi10_insane": {
+  "stream": "boeshi_gta6_goneright",
+  "hook": "",
+  "cam": [
+   0,
+   95,
+   280,
+   185
+  ],
+  "game": [
+   300,
+   0,
+   980,
+   640
+  ],
+  "hashtags": [
+   "boeshi",
+   "gta6",
+   "gta",
+   "twitch",
+   "gaming"
+  ],
+  "start": 13975,
+  "end": 14045,
+  "title": "\"Holy Aim\" - Boeshi's GTA 6 Shootout",
+  "description": "Boeshi vs a whole gang in GTA 6: \"holy aim.\" Full stream at twitch.tv/darealboeshi"
  }
 }
