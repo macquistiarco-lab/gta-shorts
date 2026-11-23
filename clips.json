@@ -393,5 +393,74 @@
    "twitch",
    "gaming"
   ]
+ },
+ "boeshi06_stuck": {
+  "stream": "boeshi_gta6_leaked1",
+  "start": 5085,
+  "end": 5160,
+  "hook": "",
+  "title": "\"This Is Gonna Be The Run\" - Boeshi Drives in GTA 6",
+  "description": "Boeshi locks in for the perfect drive in GTA 6. It is not the run. Full stream at twitch.tv/darealboeshi",
+  "hashtags": [
+   "boeshi",
+   "gta6",
+   "gta",
+   "twitch",
+   "gaming"
+  ]
+ },
+ "boeshi07_speedlimit": {
+  "stream": "boeshi_gta6_leaked2",
+  "start": 2345,
+  "end": 2405,
+  "hook": "",
+  "cam": [
+   0,
+   95,
+   280,
+   185
+  ],
+  "game": [
+   300,
+   0,
+   980,
+   640
+  ],
+  "title": "Boeshi Tries to Drive Like a Normal Human in GTA 6",
+  "description": "\"Let's drive like a normal human American.\" Boeshi vs the GTA 6 speed limit. Full stream at twitch.tv/darealboeshi",
+  "hashtags": [
+   "boeshi",
+   "gta6",
+   "gta",
+   "twitch",
+   "gaming"
+  ]
+ },
+ "boeshi08_drift": {
+  "stream": "boeshi_gta6_leaked2",
+  "start": 4720,
+  "end": 4790,
+  "hook": "",
+  "cam": [
+   0,
+   95,
+   280,
+   185
+  ],
+  "game": [
+   300,
+   0,
+   980,
+   640
+  ],
+  "title": "Boeshi Is Getting the Hang of GTA 6 (He Is Not)",
+  "description": "Drifting, losing the cops and getting lost at the same time. Full stream at twitch.tv/darealboeshi",
+  "hashtags": [
+   "boeshi",
+   "gta6",
+   "gta",
+   "twitch",
+   "gaming"
+  ]
  }
 }
