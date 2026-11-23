@@ -142,5 +142,26 @@
       980,
       640
     ]
+  },
+  "boeshi_gta6_goneright": {
+    "streamer": "Boeshi",
+    "title": "Streaming GTA 6 (gone right)",
+    "source_url": "https://www.twitch.tv/videos/2938193982",
+    "twitch_vod": "2938193982",
+    "quality": "720p60",
+    "campaign": "campaigns/boeshi_gta6.md",
+    "overlay": "assets/boeshi_overlay.png",
+    "cam": [
+      10,
+      90,
+      272,
+      190
+    ],
+    "game": [
+      300,
+      0,
+      980,
+      640
+    ]
   }
 }
